@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Soft deletion flag: "deleting" a task sets is_archived to true
+     * instead of removing the row.
+     */
+    public function up(): void
+    {
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->boolean('is_archived')->default(false)->after('task_date');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropColumn('is_archived');
+        });
+    }
+};

@@ -1,0 +1,20 @@
+# ---------------------------------------------------------------------------
+#  Root .htaccess (for hosting where the web root is the project folder,
+#  e.g. InfinityFree's htdocs). Sends every request into public/, so .env,
+#  app/, vendor/, storage/ and database/ can never be opened from a browser.
+# ---------------------------------------------------------------------------
+Options -Indexes
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Remove trailing slashes: /tasks/ -> /tasks
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Everything else goes into public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ /public/$1 [L]
+</IfModule>
